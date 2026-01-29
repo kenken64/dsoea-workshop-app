@@ -29,9 +29,14 @@ COPY . .
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-# Dummy values for build-time (not used at runtime)
-ENV OPENAI_API_KEY="sk-dummy-key-for-build"
-ENV DATABASE_URL="file:build.db"
+
+# Build-time arguments with dummy defaults (Railway can override these)
+ARG OPENAI_API_KEY="sk-dummy-key-for-build"
+ARG DATABASE_URL="file:build.db"
+
+# Make ARGs available as ENV during build
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
+ENV DATABASE_URL=$DATABASE_URL
 
 # Build the application
 RUN npm run build
