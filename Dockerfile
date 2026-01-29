@@ -54,32 +54,28 @@ RUN apk add --no-cache sqlite
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Create data directory for SQLite database (use /app/data for Railway compatibility)
-RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+# Create data directory for SQLite database
+RUN mkdir -p /app/data
 
 # Copy public assets
 COPY --from=builder /app/public ./public
 
 # Copy standalone build
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Copy content directory for markdown files
-COPY --from=builder --chown=nextjs:nodejs /app/content ./content
+COPY --from=builder /app/content ./content
 
 # Copy database seed script and related files
-COPY --from=builder --chown=nextjs:nodejs /app/db ./db
-COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/db ./db
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # Copy drizzle migrations if they exist
-COPY --from=builder --chown=nextjs:nodejs /app/drizzle* ./
+COPY --from=builder /app/drizzle* ./
 
 # Create entrypoint script
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
@@ -101,8 +97,6 @@ RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'echo "Starting application..."' >> /app/entrypoint.sh && \
     echo 'exec node server.js' >> /app/entrypoint.sh && \
     chmod +x /app/entrypoint.sh
-
-USER nextjs
 
 # Expose port
 EXPOSE 3000
