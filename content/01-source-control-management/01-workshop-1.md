@@ -1,7 +1,7 @@
 ---
 title: "Workshop 1"
 order: 1
-videoUrl: "https://www.youtube.com/watch?v=FzFjYSFQq8A"
+videoUrl: "https://youtu.be/cZUBfSaCQlo"
 submission: |
   # Workshop 1 - Github Workshop Submission
 
