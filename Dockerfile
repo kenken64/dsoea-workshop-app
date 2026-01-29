@@ -55,8 +55,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Create data directory for SQLite database
-RUN mkdir -p /data && chown nextjs:nodejs /data
+# Create data directory for SQLite database (use /app/data for Railway compatibility)
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
 # Copy public assets
 COPY --from=builder /app/public ./public
@@ -82,6 +82,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/drizzle* ./
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'set -e' >> /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
+    echo '# Ensure data directory exists' >> /app/entrypoint.sh && \
+    echo 'mkdir -p /app/data' >> /app/entrypoint.sh && \
+    echo 'echo "Database URL: $DATABASE_URL"' >> /app/entrypoint.sh && \
+    echo '' >> /app/entrypoint.sh && \
     echo '# Run database seed/migration' >> /app/entrypoint.sh && \
     echo 'echo "Running database seed..."' >> /app/entrypoint.sh && \
     echo 'npx tsx db/seed.ts' >> /app/entrypoint.sh && \
@@ -100,7 +104,8 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # Default database path (can be overridden via environment variable)
-ENV DATABASE_URL="file:/data/workshop.db"
+# Use /app/data for Railway compatibility without requiring a volume
+ENV DATABASE_URL="file:/app/data/workshop.db"
 
 # Start the application
 CMD ["/app/entrypoint.sh"]
