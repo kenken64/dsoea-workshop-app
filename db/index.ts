@@ -9,6 +9,7 @@ let database: LibSQLDatabase<typeof schema> | null = null;
 function getClient(): Client {
   if (!client) {
     const databaseUrl = process.env.DATABASE_URL || "file:workshop.db";
+    console.log("[DB] Creating client with URL:", databaseUrl);
     client = createClient({ url: databaseUrl });
   }
   return client;

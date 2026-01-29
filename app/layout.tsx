@@ -18,6 +18,8 @@ export const metadata: Metadata = {
 };
 
 async function getNavigation() {
+  console.log("[Navigation] Fetching chapters...");
+  console.log("[Navigation] DATABASE_URL:", process.env.DATABASE_URL);
   try {
     const allChapters = await db.query.chapters.findMany({
       orderBy: [asc(chapters.order)],
@@ -28,6 +30,9 @@ async function getNavigation() {
       },
     });
     console.log(`[Navigation] Found ${allChapters.length} chapters`);
+    if (allChapters.length > 0) {
+      console.log("[Navigation] First chapter:", allChapters[0].title);
+    }
     return allChapters;
   } catch (error) {
     console.error("[Navigation] Error fetching chapters:", error);
