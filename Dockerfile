@@ -85,13 +85,17 @@ COPY --from=builder --chown=nextjs:nodejs /app/drizzle* ./
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'set -e' >> /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
-    echo '# Ensure data directory exists' >> /app/entrypoint.sh && \
-    echo 'mkdir -p /app/data' >> /app/entrypoint.sh && \
+    echo '# Debug info' >> /app/entrypoint.sh && \
     echo 'echo "Database URL: $DATABASE_URL"' >> /app/entrypoint.sh && \
+    echo 'echo "Current user: $(whoami)"' >> /app/entrypoint.sh && \
+    echo '' >> /app/entrypoint.sh && \
+    echo '# Ensure data directory exists and is writable' >> /app/entrypoint.sh && \
+    echo 'mkdir -p /app/data' >> /app/entrypoint.sh && \
+    echo 'ls -la /app/data' >> /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
     echo '# Run database seed/migration' >> /app/entrypoint.sh && \
     echo 'echo "Running database seed..."' >> /app/entrypoint.sh && \
-    echo 'npx tsx db/seed.ts' >> /app/entrypoint.sh && \
+    echo 'npx tsx db/seed.ts || echo "Seed failed, continuing anyway..."' >> /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
     echo '# Start the application' >> /app/entrypoint.sh && \
     echo 'echo "Starting application..."' >> /app/entrypoint.sh && \
