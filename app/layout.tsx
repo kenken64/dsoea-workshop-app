@@ -7,6 +7,9 @@ import { SearchDialog } from "@/components/search-dialog";
 import { db, chapters, pages } from "@/db";
 import { asc } from "drizzle-orm";
 
+// Force dynamic rendering to always fetch fresh data
+export const dynamic = "force-dynamic";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,8 +27,10 @@ async function getNavigation() {
         },
       },
     });
+    console.log(`[Navigation] Found ${allChapters.length} chapters`);
     return allChapters;
   } catch (error) {
+    console.error("[Navigation] Error fetching chapters:", error);
     return [];
   }
 }
