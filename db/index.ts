@@ -1,13 +1,36 @@
-import { createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { createClient, Client } from "@libsql/client";
+import { drizzle, LibSQLDatabase } from "drizzle-orm/libsql";
 import * as schema from "./schema";
 
-const databaseUrl = process.env.DATABASE_URL || "file:workshop.db";
+// Lazy initialization to avoid build-time database connection
+let client: Client | null = null;
+let database: LibSQLDatabase<typeof schema> | null = null;
 
-const client = createClient({
-  url: databaseUrl,
+function getClient(): Client {
+  if (!client) {
+    const databaseUrl = process.env.DATABASE_URL || "file:workshop.db";
+    client = createClient({ url: databaseUrl });
+  }
+  return client;
+}
+
+function getDb(): LibSQLDatabase<typeof schema> {
+  if (!database) {
+    database = drizzle(getClient(), { schema });
+  }
+  return database;
+}
+
+// Export a proxy that lazily initializes the database
+export const db = new Proxy({} as LibSQLDatabase<typeof schema>, {
+  get(_, prop) {
+    const realDb = getDb();
+    const value = (realDb as any)[prop];
+    if (typeof value === "function") {
+      return value.bind(realDb);
+    }
+    return value;
+  },
 });
-
-export const db = drizzle(client, { schema });
 
 export * from "./schema";

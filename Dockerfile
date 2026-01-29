@@ -38,6 +38,9 @@ ARG DATABASE_URL="file:build.db"
 ENV OPENAI_API_KEY=$OPENAI_API_KEY
 ENV DATABASE_URL=$DATABASE_URL
 
+# Create data directory for build
+RUN mkdir -p /app/data
+
 # Build the application
 RUN npm run build
 
