@@ -13,8 +13,8 @@ FROM base AS deps
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (suppress npm update notice)
+RUN npm ci --loglevel=error
 
 # ---- Builder ----
 FROM base AS builder
@@ -91,7 +91,7 @@ RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
     echo '# Run database seed/migration' >> /app/entrypoint.sh && \
     echo 'echo "Running database seed..."' >> /app/entrypoint.sh && \
-    echo 'npx tsx db/seed.ts || echo "Seed failed, continuing anyway..."' >> /app/entrypoint.sh && \
+    echo 'NPM_CONFIG_UPDATE_NOTIFIER=false npx --yes tsx db/seed.ts || echo "Seed failed, continuing anyway..."' >> /app/entrypoint.sh && \
     echo '' >> /app/entrypoint.sh && \
     echo '# Start the application' >> /app/entrypoint.sh && \
     echo 'echo "Starting application..."' >> /app/entrypoint.sh && \
