@@ -1,6 +1,5 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
-import { migrate } from "drizzle-orm/libsql/migrator";
 import { eq } from "drizzle-orm";
 import * as schema from "./schema";
 import { getAllContent } from "../lib/content";
@@ -19,13 +18,37 @@ async function seed() {
 
   const db = drizzle(client, { schema });
 
-  // Run migrations first
-  try {
-    await migrate(db, { migrationsFolder: "./drizzle" });
-    console.log("Migrations completed");
-  } catch (error) {
-    console.log("No migrations to run or migrations folder not found");
-  }
+  // Create tables if they don't exist
+  console.log("Creating tables if not exist...");
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS chapters (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      description TEXT,
+      "order" INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+    )
+  `);
+
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS pages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      chapter_id INTEGER NOT NULL REFERENCES chapters(id) ON DELETE CASCADE,
+      title TEXT NOT NULL,
+      slug TEXT NOT NULL,
+      content TEXT NOT NULL,
+      video_url TEXT,
+      download_only INTEGER NOT NULL DEFAULT 0,
+      ai_summary TEXT,
+      submission TEXT,
+      "order" INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch())
+    )
+  `);
+  console.log("Tables ready");
 
   // Get all content from markdown files
   const allContent = getAllContent();
