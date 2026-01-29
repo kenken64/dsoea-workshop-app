@@ -29,6 +29,9 @@ COPY . .
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+# Dummy values for build-time (not used at runtime)
+ENV OPENAI_API_KEY="sk-dummy-key-for-build"
+ENV DATABASE_URL="file:build.db"
 
 # Build the application
 RUN npm run build
