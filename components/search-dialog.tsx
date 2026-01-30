@@ -120,7 +120,7 @@ export function SearchDialog() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search workshops..."
-              className="flex-1 min-w-0 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+              className="flex-1 min-w-0 h-10 border-0 bg-transparent p-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
               autoFocus
             />
             {loading && <Loader2 className="h-4 w-4 animate-spin ml-2 shrink-0" />}
