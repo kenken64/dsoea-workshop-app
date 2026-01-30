@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 interface SearchResult {
@@ -109,18 +108,19 @@ export function SearchDialog() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-xl w-[calc(100vw-2rem)] sm:w-full p-0 gap-0 top-[10%] translate-y-0 sm:top-[50%] sm:-translate-y-1/2">
-          <DialogHeader className="px-4 pt-4 pb-0">
-            <DialogTitle className="sr-only">Search</DialogTitle>
+          <DialogHeader className="sr-only">
+            <DialogTitle>Search</DialogTitle>
           </DialogHeader>
 
-          <div className="flex items-center border-b px-4 py-2">
-            <Search className="h-4 w-4 text-muted-foreground mr-2 shrink-0" />
-            <Input
+          <div className="flex items-center border-b px-4 py-3 bg-background">
+            <Search className="h-5 w-5 text-muted-foreground mr-3 shrink-0" />
+            <input
+              type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search workshops..."
-              className="flex-1 min-w-0 h-10 border-0 bg-transparent p-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+              className="flex-1 min-w-0 bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
               autoFocus
             />
             {loading && <Loader2 className="h-4 w-4 animate-spin ml-2 shrink-0" />}
