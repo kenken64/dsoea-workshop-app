@@ -112,7 +112,7 @@ export function SearchDialog() {
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
 
-          <div className="flex items-center border-b px-4 py-3 mt-6 bg-background">
+          <div className="flex items-center border-b px-4 py-3 mt-6 sm:mt-12 bg-background">
             <Search className="h-5 w-5 text-muted-foreground mr-3 shrink-0" />
             <input
               type="text"
