@@ -1,9 +1,11 @@
 "use client";
 
+import { useRef } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Video, BookOpen, Upload, MessageSquare } from "lucide-react";
 import { YouTubePlayer } from "@/components/youtube-player";
 import { AIDebrief } from "@/components/ai-debrief";
+import { PDFExportButton } from "@/components/pdf-export-button";
 
 interface WorkshopTabsProps {
   videoUrl?: string;
@@ -42,6 +44,8 @@ export function WorkshopTabs({
 }: WorkshopTabsProps) {
   const videoId = videoUrl ? extractVideoId(videoUrl) : null;
   const showAIDebrief = !downloadOnly && tutorialRawContent && workshopTitle && pageId;
+  const tutorialRef = useRef<HTMLDivElement>(null);
+  const sanitizedTitle = workshopTitle?.replace(/[^a-zA-Z0-9-_]/g, "-") || "tutorial";
   return (
     <Tabs defaultValue="video" className="flex-1 flex flex-col">
       <TabsList className={`grid w-full ${showAIDebrief ? 'grid-cols-4' : 'grid-cols-3'} h-auto p-1 bg-muted/50 rounded-xl shrink-0`}>
@@ -101,7 +105,16 @@ export function WorkshopTabs({
       <TabsContent value="tutorial" className="mt-4 sm:mt-6 flex-1">
         <div className="rounded-xl border bg-card overflow-hidden h-full min-h-[400px] sm:min-h-[500px]">
           {tutorialContent ? (
-            <div className="p-4 sm:p-6">{tutorialContent}</div>
+            <div className="p-4 sm:p-6">
+              <div className="flex justify-end mb-4">
+                <PDFExportButton
+                  contentRef={tutorialRef}
+                  filename={`${sanitizedTitle}-tutorial`}
+                  title="Export Tutorial as PDF"
+                />
+              </div>
+              <div ref={tutorialRef}>{tutorialContent}</div>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full py-12 sm:py-16 px-4 sm:px-6">
               <div className="p-3 sm:p-4 rounded-full bg-green-100 text-green-600 mb-4">

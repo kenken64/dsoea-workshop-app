@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2, Sparkles, RefreshCw, Database } from "lucide-react";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
+import { PDFExportButton } from "@/components/pdf-export-button";
 
 interface AIDebriefProps {
   content: string;
@@ -16,6 +17,8 @@ export function AIDebrief({ content, title, pageId }: AIDebriefProps) {
   const [error, setError] = useState<string | null>(null);
   const [isCached, setIsCached] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const sanitizedTitle = title.replace(/[^a-zA-Z0-9-_]/g, "-");
 
   // Check for cached summary on mount
   useEffect(() => {
@@ -122,7 +125,7 @@ export function AIDebrief({ content, title, pageId }: AIDebriefProps) {
   if (summary) {
     return (
       <div className="p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-purple-600" />
             <h3 className="font-semibold text-lg">AI-Generated Summary</h3>
@@ -133,15 +136,24 @@ export function AIDebrief({ content, title, pageId }: AIDebriefProps) {
               </span>
             )}
           </div>
-          <button
-            onClick={() => generateSummary(true)}
-            className="px-3 py-1.5 text-sm bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors flex items-center gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Regenerate
-          </button>
+          <div className="flex items-center gap-2">
+            <PDFExportButton
+              contentRef={summaryRef}
+              filename={`${sanitizedTitle}-ai-debrief`}
+              title="Export AI Summary as PDF"
+            />
+            <button
+              onClick={() => generateSummary(true)}
+              className="px-3 py-1.5 text-sm bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors flex items-center gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Regenerate
+            </button>
+          </div>
         </div>
-        <MarkdownRenderer content={summary} />
+        <div ref={summaryRef}>
+          <MarkdownRenderer content={summary} />
+        </div>
       </div>
     );
   }
