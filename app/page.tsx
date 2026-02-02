@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Shield, GitBranch, Container, Settings, TestTube, Gauge } from "lucide-react";
 import { db, chapters, pages } from "@/db";
 import { asc } from "drizzle-orm";
@@ -56,6 +57,16 @@ export default async function HomePage() {
     <div className="max-w-5xl mx-auto space-y-12">
       {/* Hero Section */}
       <section className="space-y-6 py-4">
+        <div className="mb-6">
+          <Image
+            src="/images/nus-iss-logo.png"
+            alt="NUS ISS Logo"
+            width={280}
+            height={80}
+            className="h-auto"
+            priority
+          />
+        </div>
         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
           DevSecOps Curriculum
         </div>
