@@ -44,6 +44,13 @@ Download the complete workshop document with step-by-step instructions, code exa
 
 [Download JUnit Workshop Document (DOCX)](/docs/S-DSOEA-Testing%20Tools%20Workshop%20-%20JUnit.docx)
 
+### Calculator Example Files
+
+Download the sample Java files for the Calculator JUnit testing exercise:
+
+- [Download Calculator.java](/downloads/Calculator.java) - Main Calculator class with add, subtract, multiply, and divide methods
+- [Download CalculatorTest.java](/downloads/CalculatorTest.java) - JUnit test class with test cases for all Calculator methods
+
 ## Key Topics Covered
 
 - **Introduction to Unit Testing**: Understanding the importance of testing in software development
