@@ -107,20 +107,20 @@ export function SearchDialog() {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-xl w-[calc(100vw-2rem)] sm:w-full p-0 gap-0 top-[10%] translate-y-0 sm:top-[50%] sm:-translate-y-1/2">
+        <DialogContent className="max-w-xl w-[92vw] sm:w-full p-0 gap-0 top-[10%] translate-y-0 sm:top-[50%] sm:-translate-y-1/2 overflow-hidden">
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
 
-          <div className="flex items-center border-b px-4 py-3 mt-6 sm:mt-12 bg-background">
-            <Search className="h-5 w-5 text-muted-foreground mr-3 shrink-0" />
+          <div className="flex items-center border-b px-3 sm:px-4 py-3 mt-6 sm:mt-12 bg-background">
+            <Search className="h-5 w-5 text-muted-foreground mr-2 sm:mr-3 shrink-0" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search workshops..."
-              className="flex-1 min-w-0 bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="flex-1 min-w-0 w-full bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
               autoFocus
             />
             {loading && <Loader2 className="h-4 w-4 animate-spin ml-2 shrink-0" />}
