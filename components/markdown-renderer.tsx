@@ -62,7 +62,8 @@ export function MarkdownRenderer({
     <div
       className={cn(
         "prose prose-slate dark:prose-invert max-w-none",
-        "prose-headings:scroll-mt-20",
+        "prose-headings:scroll-mt-20 prose-headings:text-foreground",
+        "prose-p:text-foreground prose-li:text-foreground prose-strong:text-foreground",
         "prose-code:before:content-none prose-code:after:content-none",
         "prose-pre:bg-muted prose-pre:border",
         className
@@ -154,7 +155,7 @@ export function MarkdownRenderer({
             </ol>
           ),
           li: ({ children, ...props }) => (
-            <li className="text-foreground" {...props}>
+            <li className="text-foreground marker:text-foreground" {...props}>
               {children}
             </li>
           ),

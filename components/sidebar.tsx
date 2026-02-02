@@ -88,7 +88,7 @@ export function Sidebar({ chapters }: SidebarProps) {
           <GraduationCap className="h-6 w-6 text-primary shrink-0" />
           {!collapsed && (
             <Link href="/" className="font-bold text-lg hover:text-primary transition-colors">
-              S-DOEA
+              DSOEA
             </Link>
           )}
         </div>
