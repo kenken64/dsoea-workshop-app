@@ -1,7 +1,7 @@
 ---
 title: "Workshop 6"
 order: 1
-videoUrl: "https://youtu.be/biUlI0m_iIE"
+videoUrl: "https://www.youtube.com/watch?v=ndjaXiUYFKk"
 submission: |
   # Workshop 6 - Github Actions Deployment - DevOps in the Cloud Submission
 
