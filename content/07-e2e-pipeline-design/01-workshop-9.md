@@ -1,6 +1,6 @@
 ---
 title: "Workshop 9"
-order: 3
+order: 1
 submission: |
   # Workshop 9 - CI/CD Pipeline Design Submission
 

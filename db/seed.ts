@@ -60,6 +60,9 @@ async function seed() {
 
   console.log(`Found ${allContent.length} chapters`);
 
+  const validChapterSlugs: string[] = [];
+  const validPageIds: number[] = [];
+
   for (const chapter of allContent) {
     console.log(`Processing chapter: ${chapter.meta.title}`);
 
@@ -100,6 +103,8 @@ async function seed() {
       console.log(`  Created chapter: ${chapter.meta.title}`);
     }
 
+    validChapterSlugs.push(chapter.slug);
+
     // Process pages
     for (const page of chapter.pages) {
       const existingPages = await db
@@ -123,21 +128,43 @@ async function seed() {
           })
           .where(eq(pages.id, existingPage.id));
         console.log(`    Updated page: ${page.meta.title}`);
+        validPageIds.push(existingPage.id);
       } else {
         // Insert new page
-        await db.insert(pages).values({
-          chapterId,
-          title: page.meta.title,
-          slug: page.slug,
-          content: page.content,
-          videoUrl: page.meta.videoUrl || null,
-          downloadOnly: page.meta.downloadOnly || false,
-          submission: page.meta.submission || null,
-          order: page.meta.order,
-        });
+        const result = await db
+          .insert(pages)
+          .values({
+            chapterId,
+            title: page.meta.title,
+            slug: page.slug,
+            content: page.content,
+            videoUrl: page.meta.videoUrl || null,
+            downloadOnly: page.meta.downloadOnly || false,
+            submission: page.meta.submission || null,
+            order: page.meta.order,
+          })
+          .returning();
         console.log(`    Created page: ${page.meta.title}`);
+        validPageIds.push(result[0].id);
       }
     }
+  }
+
+  // Remove pages and chapters that no longer have a backing markdown file
+  const stalePages = await db.select().from(pages);
+  const pagesToDelete = stalePages.filter((p) => !validPageIds.includes(p.id));
+  for (const page of pagesToDelete) {
+    await db.delete(pages).where(eq(pages.id, page.id));
+    console.log(`  Removed stale page: ${page.title} (slug: ${page.slug})`);
+  }
+
+  const staleChapters = await db.select().from(chapters);
+  const chaptersToDelete = staleChapters.filter(
+    (c) => !validChapterSlugs.includes(c.slug)
+  );
+  for (const chapter of chaptersToDelete) {
+    await db.delete(chapters).where(eq(chapters.id, chapter.id));
+    console.log(`  Removed stale chapter: ${chapter.title} (slug: ${chapter.slug})`);
   }
 
   console.log("Seed completed!");
