@@ -126,15 +126,15 @@ jobs:
 
       - name: Download OWASP Dependency-Check
         run: |
-          wget https://github.com/dependency-check/DependencyCheck/releases/download/v12.1.1/dependency-check-12.1.1-release.zip
-          unzip -q dependency-check-12.1.1-release.zip -d $HOME/dependency-check
+          wget https://github.com/dependency-check/DependencyCheck/releases/download/v12.2.2/dependency-check-12.2.2-release.zip
+          unzip -q dependency-check-12.2.2-release.zip -d $HOME/dependency-check
 
       - name: Run OWASP Dependency-Check
         run: |
           chmod +x $HOME/dependency-check/dependency-check/bin/dependency-check.sh
           $HOME/dependency-check/dependency-check/bin/dependency-check.sh \
             --project "bitcoin" \
-            --nvdApiKey ${{ secrets.WORKSHOP6_NVD_API_KEY }} \
+            --nvdDatafeed 'https://open-vulnerability-data-mirror-production.up.railway.app/nvdcve-{0}.json.gz' \
             --out . \
             --scan . \
             --disableOssIndex
@@ -145,10 +145,6 @@ jobs:
           name: sast-report
           path: ./dependency-check-report.html
 ```
-
-2. Apply NVD API Key from the following website https://nvd.nist.gov/developers/request-an-api-key. The api key will be sent to your email address. Setup the key as github action secret (WORKSHOP6_NVD_API_KEY).
-
-![SAST Setup](https://raw.githubusercontent.com/kenken64/NUSISS-DevSecOpsEng/master/workshop/screens/sast2.png)
 
 ## DAST
 

@@ -90,7 +90,7 @@ nano package.json
 
 ```json
 "dependencies": {
-    "express": "4.19.2"
+    "express": "4.20.0"
 }
 ```
 
