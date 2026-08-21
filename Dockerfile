@@ -31,11 +31,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 # Build-time arguments with dummy defaults (Railway can override these)
-ARG OPENAI_API_KEY="sk-dummy-key-for-build"
+ARG OPENROUTER_API_KEY="sk-dummy-key-for-build"
+ARG OPENROUTER_MODEL="openai/gpt-5.6-luna"
 ARG DATABASE_URL="file:build.db"
 
 # Make ARGs available as ENV during build
-ENV OPENAI_API_KEY=$OPENAI_API_KEY
+ENV OPENROUTER_API_KEY=$OPENROUTER_API_KEY
+ENV OPENROUTER_MODEL=$OPENROUTER_MODEL
 ENV DATABASE_URL=$DATABASE_URL
 
 # Create data directory for build

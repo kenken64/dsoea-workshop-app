@@ -5,14 +5,23 @@ import { eq } from "drizzle-orm";
 // Force dynamic rendering to avoid build-time evaluation
 export const dynamic = "force-dynamic";
 
-// Lazy initialization of OpenAI client to avoid build-time errors
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "openai/gpt-5.6-luna";
+
+// Lazy initialization of OpenRouter client (OpenAI-compatible API) to avoid build-time errors
 async function getOpenAIClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY environment variable is not set");
+    throw new Error("OPENROUTER_API_KEY environment variable is not set");
   }
   const { default: OpenAI } = await import("openai");
-  return new OpenAI({ apiKey });
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": process.env.APP_URL || "https://dsoea-workshop-app.up.railway.app",
+      "X-Title": "S-DOEA Workshop App",
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {
@@ -56,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     const openai = await getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: OPENROUTER_MODEL,
       messages: [
         {
           role: "system",

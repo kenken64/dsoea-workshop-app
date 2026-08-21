@@ -60,7 +60,8 @@ cp .env.example .env
 4. Update `.env` with your values:
 ```env
 DATABASE_URL=file:workshop.db
-OPENAI_API_KEY=your_openai_api_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=openai/gpt-5.6-luna
 ```
 
 5. Seed the database:
@@ -171,7 +172,8 @@ git push origin main
 
 ```
 DATABASE_URL=file:/app/data/workshop.db
-OPENAI_API_KEY=your_openai_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+OPENROUTER_MODEL=openai/gpt-5.6-luna
 ```
 
 ### 5. Deploy
@@ -194,7 +196,8 @@ Railway will automatically build and deploy. The database is seeded on each cont
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `DATABASE_URL` | SQLite database path (e.g., `file:workshop.db`) | Yes |
-| `OPENAI_API_KEY` | OpenAI API key for AI Debrief feature | Yes |
+| `OPENROUTER_API_KEY` | OpenRouter API key for AI Debrief feature | Yes |
+| `OPENROUTER_MODEL` | OpenRouter model slug (e.g. `openai/gpt-5.6-luna`) | No (defaults to `openai/gpt-5.6-luna`) |
 
 ## License
 
