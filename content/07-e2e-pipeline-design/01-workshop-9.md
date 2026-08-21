@@ -49,3 +49,9 @@ The proposed solution should address the following:
 
 - https://www.youtube.com/watch?v=XeFOpSNgSGk
 - https://www.youtube.com/watch?v=nN9d_bLE-vM&t=127s
+
+### Example: Netflix CI/CD Pipeline
+
+As a real-world reference for the scale and structure your proposal could draw from, here is how Netflix's CI/CD pipeline is architected:
+
+![Netflix CI/CD Pipeline](https://assets.bytebytego.com/diagrams/0287-netflix-ci-cd.png)
