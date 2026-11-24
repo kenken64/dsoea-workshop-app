@@ -45,6 +45,7 @@ export function WorkshopTabs({
   const videoId = videoUrl ? extractVideoId(videoUrl) : null;
   const showAIDebrief = !downloadOnly && tutorialRawContent && workshopTitle && pageId;
   const tutorialRef = useRef<HTMLDivElement>(null);
+  const submissionRef = useRef<HTMLDivElement>(null);
   const sanitizedTitle = workshopTitle?.replace(/[^a-zA-Z0-9-_]/g, "-") || "tutorial";
   return (
     <Tabs defaultValue="video" className="flex-1 flex flex-col">
@@ -131,7 +132,18 @@ export function WorkshopTabs({
 
       <TabsContent value="submission" className="mt-4 sm:mt-6 flex-1">
         <div className="rounded-xl border bg-card overflow-hidden h-full min-h-[400px] sm:min-h-[500px]">
-          {submissionContent || (
+          {submissionContent ? (
+            <div className="p-4 sm:p-6">
+              <div className="flex justify-end mb-4">
+                <PDFExportButton
+                  contentRef={submissionRef}
+                  filename={`${sanitizedTitle}-submission`}
+                  title="Export Submission as PDF"
+                />
+              </div>
+              <div ref={submissionRef}>{submissionContent}</div>
+            </div>
+          ) : (
             <div className="flex flex-col items-center justify-center h-full py-12 sm:py-16 px-4 sm:px-6">
               <div className="p-3 sm:p-4 rounded-full bg-orange-100 text-orange-600 mb-4">
                 <Upload className="h-6 w-6 sm:h-8 sm:w-8" />
